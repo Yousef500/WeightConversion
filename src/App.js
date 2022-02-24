@@ -1,41 +1,31 @@
-import './App.css';
-import {
-    AppBar,
-    Button,
-    Container,
-    CssBaseline,
-    Grid,
-    InputAdornment,
-    TextField,
-    ThemeProvider,
-    Toolbar,
-    Typography
-} from "@mui/material";
-import {createTheme} from '@mui/material/styles';
-import {useState} from "react";
-
+import {Container, CssBaseline, ThemeProvider} from "@mui/material";
+import {createTheme} from "@mui/material/styles";
+import Header from "./components/Header";
+import HomePage from "./pages/HomePage";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 const theme = createTheme({
     palette: {
         primary: {
-            light: '#757ce8',
-            main: '#3f50b5',
-            dark: '#002884',
-            contrastText: '#fff',
+            light: "#757ce8",
+            main: "#3f50b5",
+            dark: "#002884",
+            contrastText: "#fff"
         },
         secondary: {
-            light: '#ff7961',
-            main: '#f44336',
-            dark: '#ba000d',
-            contrastText: '#fff',
+            light: "#ff7961",
+            main: "#f44336",
+            dark: "#ba000d",
+            contrastText: "#fff"
         },
         primaryLight: {
-            main: '#757ce8',
-            contrastText: '#000',
+            main: "#757ce8",
+            contrastText: "#000"
         },
         primaryDark: {
-            main: '#002884',
-            contrastText: '#fff',
+            main: "#002884",
+            contrastText: "#fff"
         }
     },
     breakpoints: {
@@ -44,99 +34,44 @@ const theme = createTheme({
             sm: 600,
             md: 900,
             lg: 1200,
-            xl: 1536,
-        },
-    },
+            xl: 1536
+        }
+    }
 });
 
 function App() {
-    const [kg, setKg] = useState(0);
-    const [pound, setLbs] = useState(0);
-    const [ounce, setOz] = useState(0);
+    const [google, setGoogle] = useState();
 
-    const handleInputChange = (e) => {
-        const val = e.target.value;
-        switch (e.target.name) {
-            case 'kg':
-                setKg(val);
-                setLbs(val / 0.45359237);
-                setOz(val / 0.02834952);
-                break;
-            case 'pound':
-                setLbs(val);
-                setKg(val * 0.45359237);
-                setOz(val * 16);
-                break;
-            case 'ounce':
-                setOz(val);
-                setKg(val * 0.02834952);
-                setLbs(val / 16);
-                break;
-            default:
+    useEffect(() => {
+        const loadGoogle = async () => {
+            const {data} = await axios.get('https://accounts.google.com/gsi/client');
+            setGoogle(data);
         }
-    }
+        loadGoogle();
 
+    }, []);
+
+
+    const handleCredentialResponse = (response) => {
+        console.log("Encoded JWT ID token: " + response.credential);
+    }
+    window.onload = function () {
+        google.accounts.id.initialize({
+            client_id: "915033900039-bdlfua16lgflief48fks1e5u4e6b44u4.apps.googleusercontent.com",
+            callback: handleCredentialResponse
+        });
+        google.accounts.id.renderButton(
+            document.getElementById("buttonDiv"),
+            {theme: "outline", size: "large"}  // customization attributes
+        );
+        google.accounts.id.prompt(); // also display the One Tap dialog
+    }
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline/>
-            <AppBar position="static" color='primary' sx={{py: 1, mb: 5}}>
-                <Toolbar>
-                    <Typography variant="h6" component="div" sx={{flexGrow: 1, fontWeight: 'bold'}}>
-                        WeightConversion
-                    </Typography>
-                    <Button color="inherit"><Typography variant='h6'>Login</Typography></Button>
-                </Toolbar>
-            </AppBar>
+            <Header/>
             <Container maxWidth={"md"}>
-                <Grid container direction={"column"} justifyContent="center" spacing={4}>
-                    <Grid item xs={12}/>
-
-                    <Grid item xs={12}>
-                        <TextField
-                            onChange={handleInputChange}
-                            value={kg}
-                            name='kg'
-                            fullWidth
-                            autoFocus
-                            variant={'outlined'}
-                            color={'secondary'}
-                            label={'Weight in Kg'}
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">kg</InputAdornment>,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} color={'primaryLight'}>
-                        <TextField
-                            onChange={handleInputChange}
-                            value={pound}
-                            name='pound'
-                            fullWidth
-                            variant={'outlined'}
-                            color={'secondary'}
-                            label={'Weight in Pounds'}
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">Lbs</InputAdornment>,
-                            }}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} color={'primaryLight'}>
-                        <TextField
-                            onChange={handleInputChange}
-                            value={ounce}
-                            name='ounce'
-                            fullWidth
-                            variant={'outlined'}
-                            color={'secondary'}
-                            label={'Weight in Ounces'}
-                            InputProps={{
-                                endAdornment: <InputAdornment position="end">Oz</InputAdornment>,
-                            }}
-                        />
-                    </Grid>
-                </Grid>
+                <HomePage/>
             </Container>
         </ThemeProvider>
     );
