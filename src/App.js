@@ -2,6 +2,8 @@ import {Container, CssBaseline, ThemeProvider} from "@mui/material";
 import {createTheme} from "@mui/material/styles";
 import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
+import {Route, Routes} from "react-router-dom";
+import SignIn from "./components/SignIn";
 
 const theme = createTheme({
     palette: {
@@ -45,7 +47,10 @@ function App() {
             <CssBaseline/>
             <Header/>
             <Container maxWidth={"md"}>
-                <HomePage/>
+                <Routes>
+                    <Route exact path={'/'} element={<HomePage/>}/>
+                    <Route path={'/login'} element={<SignIn/>}/>
+                </Routes>
             </Container>
         </ThemeProvider>
     );
