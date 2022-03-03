@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import {Route, Routes} from "react-router-dom";
 import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 
 const theme = createTheme({
     palette: {
@@ -50,6 +51,7 @@ function App() {
                 <Routes>
                     <Route exact path={'/'} element={<HomePage/>}/>
                     <Route path={'/login'} element={<SignIn/>}/>
+                    <Route path={'/register'} element={<SignUp/>}/>
                 </Routes>
             </Container>
         </ThemeProvider>

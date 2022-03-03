@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -17,13 +18,19 @@ const client_id = "915033900039-bdlfua16lgflief48fks1e5u4e6b44u4.apps.googleuser
 
 const SignIn = () => {
 
-    const {register, handleSubmit, formState: {errors}} = useForm({
-        mode: 'onTouched',
+    const [showPassword, setShowPassword] = useState(false);
+
+    const {register, handleSubmit, formState: {errors, isValid}} = useForm({
+        mode: 'onChange',
         reValidateMode: 'onChange'
     });
 
     const onsubmit = (data) => {
         console.log(data);
+    }
+
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword);
     }
 
     return (
@@ -67,7 +74,7 @@ const SignIn = () => {
                     fullWidth
                     label="Password"
                     autoComplete={'no'}
-                    type={'password'}
+                    type={showPassword ? 'text' : 'password'}
                     {
                         ...register(
                             "password",
@@ -86,14 +93,21 @@ const SignIn = () => {
                     helperText={errors.password?.message}
                 />
                 <FormControlLabel
-                    control={<Checkbox value="remember" color="primary"/>}
-                    label="Remember me"
+                    control={
+                        <Checkbox
+                            value={showPassword}
+                            color="primary"
+                            onChange={handleShowPassword}
+                        />
+                    }
+                    label="Show password"
                 />
                 <Button
                     type="submit"
                     fullWidth
                     variant="contained"
                     sx={{mt: 3, mb: 2}}
+                    disabled={!isValid}
                 >
                     Sign In
                 </Button>
@@ -108,7 +122,8 @@ const SignIn = () => {
                             isSignedIn={true}
 
                             render={renderProps => (
-                                <Button sx={{pt: 1.5}} variant={'outlined'} color={'info'} fullWidth onClick={renderProps.onClick}>
+                                <Button sx={{pt: 1.5}} variant={'outlined'} color={'info'} fullWidth
+                                        onClick={renderProps.onClick}>
                                     <Grid spacing={1} container display={'flex'} direction={'row'}>
                                         <Grid item xs={5} textAlign={'right'}>
                                             <GoogleIcon/>
