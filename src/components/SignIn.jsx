@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,8 +12,7 @@ import Typography from '@mui/material/Typography';
 import GoogleLogin from "react-google-login";
 import GoogleIcon from '@mui/icons-material/Google';
 import {useForm} from "react-hook-form";
-
-const client_id = "915033900039-bdlfua16lgflief48fks1e5u4e6b44u4.apps.googleusercontent.com"
+import {Link} from "react-router-dom";
 
 const SignIn = () => {
 
@@ -115,7 +113,7 @@ const SignIn = () => {
                 <Grid container>
                     <Grid item xs={12}>
                         <GoogleLogin
-                            clientId={client_id}
+                            clientId={process.env.REACT_APP_CLIENT_ID}
                             onSuccess={(res) => console.log(res)}
                             onFailure={(res) => console.log(res)}
                             cookiePolicy={'single_host_origin'}
@@ -138,12 +136,12 @@ const SignIn = () => {
                         />
                     </Grid>
                     <Grid item xs>
-                        <Link href="#" variant="body2">
+                        <Link to={'/#'} variant="body2">
                             Forgot password?
                         </Link>
                     </Grid>
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link to={'/register'}>
                             {"Don't have an account? Sign Up"}
                         </Link>
                     </Grid>

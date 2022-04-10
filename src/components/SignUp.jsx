@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -13,12 +12,10 @@ import Typography from '@mui/material/Typography';
 import {useForm} from "react-hook-form";
 import GoogleLogin from "react-google-login";
 import GoogleIcon from "@mui/icons-material/Google";
+import {Link} from "react-router-dom";
 
 
 const SignUp = () => {
-
-    const client_id = "915033900039-bdlfua16lgflief48fks1e5u4e6b44u4.apps.googleusercontent.com"
-
 
     const [showPassword, setShowPassword] = useState(false);
 
@@ -68,7 +65,7 @@ const SignUp = () => {
                             fullWidth
                             label="First Name"
                             autoFocus
-                            error={errors.firstName}
+                            error={!!errors.firstName}
                             helperText={errors.firstName?.message}
                         />
                     </Grid>
@@ -87,7 +84,7 @@ const SignUp = () => {
                                         }
                                     })
                             }
-                            error={errors.lastName}
+                            error={!!errors.lastName}
                             helperText={errors.lastName?.message}
                         />
                     </Grid>
@@ -152,7 +149,7 @@ const SignUp = () => {
                 <Grid container justifyContent="flex-end">
                     <Grid item xs={12}>
                         <GoogleLogin
-                            clientId={client_id}
+                            clientId={process.env.REACT_APP_CLIENT_ID}
                             onSuccess={(res) => console.log(res)}
                             onFailure={(res) => console.log(res)}
                             cookiePolicy={'single_host_origin'}
@@ -176,7 +173,7 @@ const SignUp = () => {
                     </Grid>
 
                     <Grid item>
-                        <Link href="#" variant="body2">
+                        <Link to={'/login'}>
                             Already have an account? Sign in
                         </Link>
                     </Grid>
